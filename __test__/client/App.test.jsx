@@ -1,6 +1,6 @@
 import App from "../../src/client/App";
-import * as ReactDOM from "react-dom";
-import * as React from "react";
+import {ReactDOM} from "react-dom";
+import React from "react";
 import { act } from "react-dom/test-utils";
 import { MemoryRouter } from "react-router-dom";
 import { RecoilRoot } from "recoil";
@@ -36,11 +36,11 @@ describe("application", () => {
       );
     });
     
-    const createBookLink = [...container.querySelectorAll("a")].find(
+    const navigateToProfile = [...container.querySelectorAll("a")].find(
       (a) => a.textContent === "Profile"
     );
     await act(async () => {
-      await createBookLink.dispatchEvent(
+      await navigateToProfile.dispatchEvent(
         new MouseEvent("click", { bubbles: true })
       );
     });
@@ -63,17 +63,43 @@ describe("application", () => {
       );
     });
     
-    const createBookLink = [...container.querySelectorAll("a")].find(
+    const navigateToRooms = [...container.querySelectorAll("a")].find(
       (a) => a.textContent === "Rooms"
     );
     await act(async () => {
-      await createBookLink.dispatchEvent(
+      await navigateToRooms.dispatchEvent(
         new MouseEvent("click", { bubbles: true })
       );
     });
     expect(container.innerHTML).toMatchSnapshot();
     expect(container.querySelector("h1").textContent).toEqual(
-      "Rooms"
+      "Available rooms"
     );
+  })
+
+  it("can navigate to signup", async () => {
+    const container = document.createElement("div");
+    await act(async () => {
+      await ReactDOM.render(
+        <RecoilRoot>
+          <MemoryRouter>
+            <App />
+          </MemoryRouter>
+        </RecoilRoot>,
+        container
+      );
+    });
+    
+    const navigateToSignin = [...container.querySelectorAll("a")].find((a) => a.textContent === "Signin");
+    await act(async () => { await navigateToSignin.dispatchEvent(new MouseEvent("click", { bubbles: true }))});
+    
+    const navigateToSignup = [...container.querySelectorAll("a")].find((a) => a.textContent === "Sing up instead");
+    await act(async () => { await navigateToSignup.dispatchEvent(new MouseEvent("click", { bubbles: true }))});
+
+    expect(container.innerHTML).toMatchSnapshot();
+    expect(container.querySelector("h1").textContent).toEqual(
+      "Signup to Convey"
+    );
+    
   })
 });

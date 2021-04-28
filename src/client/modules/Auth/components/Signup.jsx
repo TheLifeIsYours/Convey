@@ -37,7 +37,7 @@ const Signup = () => {
 
   return (
     <>
-      <h1>Signup</h1>
+      <h1>Signup to Convey</h1>
       <form>
         <label for="email-input">Email</label>
         <input id="email-input" type="text" label="Email" onChange={(e) => setEmail(e.target.value)} value={email} />

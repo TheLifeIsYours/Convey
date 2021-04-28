@@ -6,10 +6,10 @@
   "author": "thelifeisyours <tliyours@gmail.com>",
   "license": "MIT",
   "scripts": {
-    "start": "concurrently yarn:server",
-    "dev": "concurrently yarn:tsc:w yarn:client yarn:server",
+    "start": "concurrently yarn:server yarn:client",
+    "dev": "concurrently yarn:client yarn:server",
     "tsc:w": "tsc --watch",
-    "server": "nodemon build/server --watch build/server/",
+    "server": "nodemon src/server",
     "client": "parcel watch src/client/public/index.html",
     "build": "parcel build src/client/public/index.html",
     "test": "jest --coverage"

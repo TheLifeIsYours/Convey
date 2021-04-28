@@ -1,8 +1,8 @@
 import React from 'react';
 import { Route, Switch } from 'react-router-dom'
 
+import Signin from './modules/Auth/components/Signin';
 import * as Modules from './modules'
-import Signin from './modules/Auth/components/Singin';
 
 const App = () => {
   return (<>

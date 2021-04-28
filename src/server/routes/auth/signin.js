@@ -16,7 +16,7 @@ router.post('/', async (req, res, next) => {
       req.session.isLoggedIn = true;
       req.session.userInfo = client;
 
-      return res.status(200).redirect('/profile')
+      return res.redirect(200, '/profile')
     }
   }
 
