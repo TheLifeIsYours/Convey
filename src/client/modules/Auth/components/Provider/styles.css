@@ -1,0 +1,21 @@
+.provider-button {
+  display: flex;
+  grid-template-columns: 1fr auto;
+  height: 3em;
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+  gap: 2em;
+  border: none;
+  font-size: 1.1em;
+  background: white;
+}
+
+.provider-button:hover {
+  background: rgb(245, 245, 245);
+  cursor: pointer;
+}
+
+.provider-logo {
+  height:2em;
+}

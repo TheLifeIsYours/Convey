@@ -1,0 +1,16 @@
+#header-profile-signin {
+  display: grid;
+  gap:0.25em;
+  height: 2em;
+  min-width: 5em;
+  margin-right: 0.25em;
+  margin-left: 0.25em;
+  padding: 0.25em;
+  padding-left: 1em;
+  padding-right: 1em;
+  justify-self: end;
+  justify-content:center;
+  align-items:center;
+  border: solid 1px rgb(235 235 235);
+  box-shadow: #626262 1px 1px 4px -2px;
+}

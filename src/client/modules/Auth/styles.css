@@ -1,0 +1,25 @@
+#signin-container {
+  display: grid;
+  grid-template-rows: auto;
+  justify-content: center;
+  align-items: center;
+  height: 50%;
+  margin-top: 4em;
+  min-height: fit-content;
+}
+
+#signin-providers-container {
+  min-height: fit-content;
+  display: flex;
+  flex-direction: column;
+  width: 20em;
+  padding-bottom: 3em;
+  gap: 1em;
+  background: white;
+  border: solid 1px lightgray;
+  box-shadow: #b0b0b0 1px 2px 6px -3px;
+}
+
+#signin-providers-container>h1{
+  padding-left: 1em;
+}

@@ -1,0 +1,33 @@
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 5em;
+  padding-left: 1em;
+  border-bottom: solid 1px rgb(183 183 183);
+  box-shadow: #626262 1px 1px 4px -2px;
+}
+
+#header-logo {
+  height: 3.5em;
+  margin-right: 0.5em;
+}
+
+header > a.link {
+  display: grid;
+  align-content: center;
+  width: 5em;
+  height: inherit;
+  margin-left: 0.5em;
+  margin-right: 0.5em;
+}
+
+header > a {
+  color: black;
+  text-decoration: none;
+  font-size: 1.2em;
+}
+
+header > a:hover {
+  color: darkgray;
+}
