@@ -1,10 +1,7 @@
-import {Server, Socket} from 'socket.io'
-import Room from '~server/api/Convey/models/Room/Room';
-
-const io = (server: Server) => {
+const io = (server) => {
     console.log("socket.io connected");
 
-    server.on('connection', (socket: Socket) => {
+    server.on('connection', (socket) => {
 
         socket.on('ping', () => {
             socket.emit('pong', "pong")
@@ -41,8 +38,8 @@ const io = (server: Server) => {
             let clientData = convey.clientDao.getClientById(data.sender);
             console.log("New Message::::", data)
 
-            let message: any = convey.messageDao.createMessage(data);
-            let room: Room = convey.roomDao.getRoomById(data.room)!!
+            let message = convey.messageDao.createMessage(data);
+            let room = convey.roomDao.getRoomById(data.room)
             room.addMessage(message)
 
             server.emit(`room-message-${data.room}`, {...message, user: clientData});
@@ -73,4 +70,4 @@ const io = (server: Server) => {
     });
 };
 
-export default io
+module.exports = io

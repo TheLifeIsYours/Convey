@@ -6,4 +6,4 @@ const providers = [{
   use_pkce: false,
 }];
 
-export default providers;
+module.exports = providers;

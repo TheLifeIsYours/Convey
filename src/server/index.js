@@ -1,8 +1,8 @@
-import express from 'express'
-import app from './app'
-import https from 'https'
-import path from 'path'
-import fs from 'fs'
+const express = require('express')
+const app = require('./app')
+const https = require('https')
+const path = require('path')
+const fs = require('fs')
 
 // interface ExpressError extends Error {
 //   status?: number
@@ -26,7 +26,7 @@ import fs from 'fs'
 
 //HTTP Server
 const httpServer = express();
-httpServer.use('*', express.Router().get('', (req: express.Request, res: express.Response) => {
+httpServer.use('*', express.Router().get('', (req, res) => {
   console.log("Connected to http server",  JSON.stringify(req.url))
   res.redirect(`https://localhost:${process.env.PORT_HTTPS}${req.url}`);
 }));
@@ -45,11 +45,11 @@ httpsServer.listen(process.env.PORT_HTTPS);
 httpsServer.on('listening', () => logListening(process.env.PORT_HTTPS));
 
 //SocketIO
-import { Server } from 'socket.io';
-import io from './sockets/base'
+const Server = require('socket.io');
+const io = require('./sockets/base')
 
-io(new Server(httpsServer));
+io(Server(httpsServer));
 
-function logListening(port: string|any) {
+function logListening(port) {
   console.log(`\x1b[0mServer listening on \x1b[33m${port}\n\x1b[34mhttp://localhost:${port}`)
 }

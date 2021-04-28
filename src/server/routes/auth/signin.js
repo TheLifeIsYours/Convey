@@ -1,8 +1,7 @@
-import express from 'express';
+const express = require('express');
 const router = express.Router();
 
-import bcrypt from 'bcrypt';
-import UserInfo from '../../api/Convey/models/Providers/Google/UserInfo';
+const bcrypt = require('bcrypt');
 
 router.post('/', async (req, res, next) => {
   console.log(req.body);
@@ -24,11 +23,4 @@ router.post('/', async (req, res, next) => {
   res.status(400).send("Username or password incorrect");
 });
 
-export default router;
-
-declare module 'express-session' {
-  interface SessionData {
-    isLoggedIn: boolean
-    userInfo: UserInfo
-  }
-}
+module.exports = router;

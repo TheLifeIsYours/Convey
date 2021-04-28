@@ -1,10 +1,8 @@
-import express from 'express';
+const express = require('express');
 const router = express.Router();
 
-import bcrypt from 'bcrypt';
-import Client from '../../api/Convey/models/Client/Client';
-import UserInfo from '../../api/Convey/models/Providers/Google/UserInfo';
-
+const bcrypt = require('bcrypt');
+const Client =  require('../../api/Convey/models/Client/Client');
 router.post('/', async (req, res) => {
 
   const {given_name, family_name, email, password} = req.body
@@ -18,7 +16,7 @@ router.post('/', async (req, res) => {
   if(password !== undefined){
     let hashedPass = await bcrypt.hash(password, 15);
   
-    const userInfo: UserInfo = {sub: hashedPass, name: `${given_name} ${family_name}`, given_name, family_name, picture: "", email, email_verified: false, locale: "en"}
+    const userInfo = {sub: hashedPass, name: `${given_name} ${family_name}`, given_name, family_name, picture: "", email, email_verified: false, locale: "en"}
   
     const client = new Client(userInfo);
     convey.clientDao.addClient(client);
@@ -32,4 +30,4 @@ router.post('/', async (req, res) => {
   res.status(403).send("Something went wrong");
 })
 
-export default router;
+module.exports = router;

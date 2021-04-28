@@ -1,11 +1,10 @@
-import { plainToClass } from 'class-transformer';
-import path from 'path';
-import fs from 'fs';
+const path = require('path');
+const fs = require('fs');
 
-import Room from "../../models/Room/Room";
+const Room =  require("../../models/Room/Room");
 
-export default class RoomDao {
-  public rooms: Room[] = [];
+module.exports = class RoomDao {
+  rooms = [];
 
   constructor() {
     this.init();
@@ -17,7 +16,7 @@ export default class RoomDao {
     })
   }
   
-  createRoom(roomInfo: Room): Room {
+  createRoom(roomInfo) {
     let room = new Room(roomInfo);
     console.log(room);
     this.rooms.push(room);
@@ -26,15 +25,15 @@ export default class RoomDao {
     return room;
   }
 
-  getRooms(): Room[] {
+  getRooms() {
     return this.rooms.filter(room => room.id !== null);
   }
 
-  getRoomById(id: string): Room | undefined {
+  getRoomById(id) {
     return this.rooms.find(room => room.id === id);
   }
 
-  writeRoom(_room: Room): void {
+  writeRoom(_room) {
     let existingRoom = this.rooms.findIndex(room => room.id === _room.id);
 
     if(existingRoom) {
@@ -49,7 +48,7 @@ export default class RoomDao {
     fs.writeFileSync(path.join(__dirname, 'roomData.json'), JSON.stringify(this.rooms));
   }
 
-  getJSON(): Room[] {
+  getJSON() {
     console.log("writing to file roomDao");
     if(!fs.existsSync(path.join(__dirname, 'roomData.json'))) {
       this.writeJSON();

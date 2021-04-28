@@ -1,6 +1,7 @@
-import express from 'express';
-import session from 'express-session';
-import Convey from './api/Convey';
+const express = require('express');
+const session = require('express-session');
+
+global.convey = require('./api/Convey');
 
 const dotenv = require('dotenv-flow').config({silent: true});
 const cookieParser = require('cookie-parser');
@@ -10,11 +11,6 @@ const path = require('path');
 const fs = require('fs');
 
 const app = express();
-
-declare global {
-  var convey: typeof Convey;
-}
-global.convey = Convey;
 
 //Session
 app.use(session({
@@ -35,11 +31,11 @@ app.use(bodyParser.urlencoded({extended: false }));
 app.use(express.static(path.join(__dirname, '../../build/client')));
 
 //Path router
-function setupRoutes(entry: string) {
+function setupRoutes(entry) {
   return new Promise(async (resolve) => {
     console.log("\x1b[0mEntry:\x1b[34m", path.join(entry))
 
-    await fs.readdirSync(path.join(__dirname, entry)).forEach(async (route: string) => {
+    await fs.readdirSync(path.join(__dirname, entry)).forEach(async (route) => {
       
       const hasSubRoute = (route.lastIndexOf('.') <= 0)
       // console.log({hasSubRoute})
@@ -57,7 +53,7 @@ function setupRoutes(entry: string) {
   
         console.log(`\x1b[0mApplying route: \x1b[33m[\x1b[34m${uri}\x1b[0m => \x1b[34m./${route}\x1b[33m]`)
         
-        app.use(`${uri}`, (await import(`./${route}`)).default)
+        app.use(`${uri}`, (await require(`./${route}`)))
       }
     })
 
@@ -70,4 +66,4 @@ function setupRoutes(entry: string) {
   app.use((req, res, next) => req.path.startsWith('/api') ? next() : res.sendFile(path.join(__dirname, '../../build/client/index.html')))
 })()
 
-export default app
+module.exports = app

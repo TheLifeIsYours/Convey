@@ -1,26 +1,17 @@
-import { plainToClass, plainToClassFromExist } from "class-transformer";
-import Client from "../Client/Client";
-import Message from "../Message/Message";
+const Message = require("../Message/Message");
 
-export default class Room {
-  public id: string;
-  public owner?: string;
-  public name?: string;
-  public description?: string;
-  public clients: string[] = [];
-  public messages: string[] = [];
-
-  constructor(roomData?: Room, id?: string) {
+module.exports = class Room {
+  constructor(roomData, id) {
     this.id = roomData?.id || id || global.convey?.getUniqueRoomId();
     this.owner = roomData?.owner;
     this.name = roomData?.name;
     this.description = roomData?.description;
-    this.clients = roomData?.clients!! || [];
-    this.messages = roomData?.messages!! || [];
+    this.clients = roomData?.clients || [];
+    this.messages = roomData?.messages || [];
   }
   
   //Register existing client as connected to the room, if client is not already connected.
-  connectClient(clientId: string): boolean {
+  connectClient(clientId) {
     const client = convey.clientDao.getClientById(clientId);
     console.log(client)
 
@@ -38,7 +29,7 @@ export default class Room {
     return false;
   }
 
-  disconnectClient(clientId: string): boolean {
+  disconnectClient(clientId) {
     let client = convey.clientDao.getClientById(clientId);
 
     if(client) {
@@ -50,40 +41,40 @@ export default class Room {
     return false;
   }
 
-  isConnected(clientId: string): boolean {
+  isConnected(clientId) {
     return this.clients.find(sub => sub === clientId) ? true : false;
   }
 
-  addMessage(message: Message) {
-    this.messages.push(message.id!!);
+  addMessage(message) {
+    this.messages.push(message.id);
     convey.roomDao.writeRoom(this);
   }
 
   getClientData() {
-    return this.clients.map((clientId: string) => {
+    return this.clients.map((clientId) => {
       return convey.clientDao.getClientById(clientId);
     })
   }
 
-  getMessageData(): Object[] {
-    let result: Object[] = [];
+  getMessageData() {
+    let result = [];
 
     for(let messageId of this.messages) {
-      let message: Message = convey.messageDao.getMessageById(messageId);
+      let message = convey.messageDao.getMessageById(messageId);
       
       //If a message has been deleted, and he room still has a reference of its id, remove the id from the messages list.
       if(message === undefined) {
         this.messages.splice(this.messages.indexOf(messageId), 1);
         convey.roomDao.writeRoom(this);
       } else {
-        result.push({...message, user: convey.clientDao.getClientById(message.sender!!)});
+        result.push({...message, user: convey.clientDao.getClientById(message.sender)});
       }
     }
 
     return result;
   }
 
-  getRoomJson(): Object {
+  getRoomJson() {
     return {
       id: this.id,
       owner: this.owner,

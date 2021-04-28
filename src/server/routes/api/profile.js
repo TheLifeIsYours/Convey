@@ -1,9 +1,8 @@
-import express from 'express'
+const express = require('express');
 const router = express.Router()
-import fetch from 'node-fetch'
+const fetch = require('node-fetch')
 
-import providers from '../../data/auth/providers'
-import UserInfo from '../../api/Convey/models/Providers/Google/UserInfo'
+const providers = require('../../data/auth/providers');
 
 router.get('/', (req, res) => {
   if(req.session.isLoggedIn) {
@@ -38,7 +37,7 @@ router.post('/', async (req, res) => {
     const userInfoResponse = await fetch(userinfo_endpoint, {headers: {authorization}});
 
     if (userInfoResponse.ok) {
-      const userInfo: UserInfo = await userInfoResponse.json();
+      const userInfo = await userInfoResponse.json();
       let clientData = convey.clientDao.getClientById(userInfo.sub)
       
       if(!clientData) {
@@ -54,4 +53,4 @@ router.post('/', async (req, res) => {
   res.status(401).send();
 })
 
-export default router
+module.exports = router

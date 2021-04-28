@@ -1,11 +1,10 @@
-import { plainToClass } from 'class-transformer';
-import path from 'path';
-import fs from 'fs';
+const path = require('path');
+const fs = require('fs');
 
-import Message from '../../models/Message/Message'
+const Message = require('../../models/Message/Message');
 
-export default class MessageDAO {
-  public messages: Message[] = [];
+module.exports = class MessageDAO {
+  messages = [];
 
   constructor() {
     this.init();
@@ -17,21 +16,21 @@ export default class MessageDAO {
     })
   }
 
-  getMessages(clientId: string): Message[] {
+  getMessages(clientId) {
     return this.messages.filter(message => message.sender === clientId);
   }
 
-  getMessageById(messageId: string): Message {
-    return this.messages.find(message => message.id === messageId)!!
+  getMessageById(messageId) {
+    return this.messages.find(message => message.id === messageId)
   }
 
-  writeMessage(message: Message) {
+  writeMessage(message) {
     console.log("Writing message::::", message);
     this.messages.push(message);
     this.writeJSON();
   }
 
-  createMessage(messageData: Message): Message {
+  createMessage(messageData) {
     console.log("Creating message::::", messageData);
     let message = new Message(messageData);
     this.writeMessage(message);
@@ -43,7 +42,7 @@ export default class MessageDAO {
     fs.writeFileSync(path.join(__dirname, 'messageData.json'), JSON.stringify(this.messages));
   }
 
-  getJSON(): Message[] {
+  getJSON() {
     console.log("writing to file messageDao");
     if(!fs.existsSync(path.join(__dirname, 'messageData.json'))) {
       this.writeJSON();

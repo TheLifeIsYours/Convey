@@ -1,12 +1,10 @@
-import { plainToClass } from 'class-transformer';
-import path from 'path';
-import fs from 'fs';
+const path = require('path');
+const fs = require('fs');
 
-import Client from "../../models/Client/Client";
-import UserInfo from '../../models/Providers/Google/UserInfo';
+const Client =  require("../../models/Client/Client");
 
-export default class ClientDao {
-  public clients: Client[] = [];
+module.exports = class ClientDao {
+  clients = [];
 
   constructor() {
     this.init();
@@ -18,16 +16,16 @@ export default class ClientDao {
     })
   }
 
-  addClient(client: Client) {
+  addClient(client) {
     this.clients.push(client);
     this.writeJSON();
   }
 
-  getClient(userInfo: UserInfo): Client | undefined {
+  getClient(userInfo) {
     return this.clients.find(client => client.sub === userInfo.sub);
   }
 
-  getClientById(clientId: string): Client | undefined {
+  getClientById(clientId) {
     console.log("looking for ", clientId)
 
     for(let client of this.clients) {
@@ -40,7 +38,7 @@ export default class ClientDao {
     return undefined;
   }
 
-  getClients(userInfo: UserInfo): Client[] {
+  getClients(userInfo) {
     return this.clients.filter(client => client.sub === userInfo.sub);
   }
 
@@ -48,7 +46,7 @@ export default class ClientDao {
     fs.writeFileSync(path.join(__dirname, 'clientData.json'), JSON.stringify(this.clients));
   }
 
-  getJSON(): UserInfo[] {
+  getJSON() {
     console.log("writing to file clientDao");
     if(!fs.existsSync(path.join(__dirname, 'clientData.json'))) {
       this.writeJSON();
