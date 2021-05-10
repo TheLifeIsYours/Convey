@@ -2,7 +2,6 @@ import React from 'react';
 import { Route, Switch } from 'react-router-dom'
 
 import * as Modules from './modules'
-import Signin from './modules/Auth/components/Singin';
 
 const App = () => {
   return (<>
@@ -14,7 +13,7 @@ const App = () => {
       <Route path="/room/create" component={() => <Modules.Convey key={location.href} roomType="create" />} />
       <Route path="/room/:id" component={() => <Modules.Convey key={location.href}  roomType="convey" />} />
       <Route path="/auth/signin" component={() => <Modules.Auth authType={"signin"} />} />
-      <Route path="/auth/convey" component={() => <Signin/>} />
+      <Route path="/auth/convey" component={() => <Modules.Auth authType={"convey"} />} />
       <Route path="/auth/signup" component={() => <Modules.Auth authType={"signup"} />} />
       <Route path="/auth/signout" component={() => <Modules.Auth authType={"signout"} />} />
       <Route path="/auth/oauth2callback" component={() => <Modules.Auth authType={"callback"} />} />
