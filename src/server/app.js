@@ -5,7 +5,6 @@ global.convey = require('./api/Convey');
 
 const dotenv = require('dotenv-flow').config({silent: true});
 const cookieParser = require('cookie-parser');
-const bodyParser = require('body-parser');
 const passport = require('passport');
 const path = require('path');
 const fs = require('fs');
@@ -26,8 +25,8 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 app.use(cookieParser());
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({extended: false }));
+app.use(express.json());
+app.use(express.urlencoded());
 app.use(express.static(path.join(__dirname, '../../build/client')));
 
 //Path router
