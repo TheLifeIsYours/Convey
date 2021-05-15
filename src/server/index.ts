@@ -26,7 +26,7 @@ import fs from 'fs'
 
 //HTTP Server
 const httpServer = express();
-httpServer.use('*', express.Router().get('', (req: express.Request, res: express.Response) => {
+httpServer.use('*', express.Router().get('/', (req: express.Request, res: express.Response) => {
   console.log("Connected to http server",  JSON.stringify(req.url))
   res.redirect(`https://localhost:${process.env.PORT_HTTPS}${req.url}`);
 }));
@@ -51,5 +51,5 @@ import io from './sockets/base'
 io(new Server(httpsServer));
 
 function logListening(port: string|any) {
-  console.log(`\x1b[0mServer listening on \x1b[33m${port}\n\x1b[34mhttp://localhost:${port}`)
+  console.log(`\x1b[0mServer listening on \x1b[33m${port}\n\x1b[34mhttps://localhost:${port}`)
 }

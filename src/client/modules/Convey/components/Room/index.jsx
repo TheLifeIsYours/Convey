@@ -79,30 +79,59 @@ const Room = () => {
     }
   }, [])
 
+  //Scroll to bottom
+  useEffect(() => {
+    let msgContainer = document.querySelector('#chat-message-container')
+    msgContainer.scrollTop = msgContainer.scrollHeight
+  }, [room])
+
   return (<>
     <h1>{room.name}</h1>
     <p>{room.description}</p>
     
     <div id="chat-message-container">{
-      room.messages.map((message, key) => { return (
-        <div key={key} className="chat-message">
-          <img className="chat-message-sender-image" src={message.user?.picture}/>
-          <div className="chat-message-sender">
-            <div className="chat-message-sender-name">{message.user?.name}</div>
-            <div className="chat-message-time">{new Date(message.time).toLocaleTimeString()}</div>
+
+      room.messages.length > 1 &&
+      // room.messages.reduce((prevMessage, message, key) => {
+        // console.log(prevMessage, message, key)
+      room.messages.slice().map((message, key, messages) => {
+        let user = room.clients.find((client) => client.sub == message.sender)
+
+        return (
+          <div key={key} className="chat-message">
+            <img className="chat-message-sender-image" src={user?.picture}/>
+            <div className="chat-message-sender">
+              <div className="chat-message-sender-name">{user?.name}</div>
+              <div className="chat-message-time">{new Date(message.time).toLocaleTimeString()}</div>
+            </div>
+
+            <div className="chat-message-text">{message.text}</div>
+
+            {messages.slice(key-1).map((subMessage, key, subMessages) => {
+              let prevMessage = subMessages[key-1];
+
+              if(
+                key > 0 &&
+                subMessage.sender == message.sender &&
+                subMessage.sender == prevMessage.sender &&
+                subMessage.time - message.time < 60000
+              ) {
+                messages.splice(key, 1)
+                return (<div key={key} className="chat-message-text">{subMessage.text}</div>)
+              }
+            })}
           </div>
-          <div className="chat-message-text">{message.text}</div>
-        </div>
-      )})
+        )
+      })
     }</div>
 
-    <form id="message-form" onSubmit={handleSubmit}>
+    <form id="message-form" onSubmit={handleSubmit} autoComplete="off">
       <input type="text" id="message-input" name="message"
         value={message}
         onChange={(e) => setMessage(e.target.value)}
       />
       
-      <button id="message-button" type="submit">Convey</button>
+      {/* <button id="message-button" type="submit">Convey</button> */}
     </form>
   </>)
 }

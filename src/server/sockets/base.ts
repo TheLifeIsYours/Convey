@@ -5,11 +5,6 @@ const io = (server: Server) => {
     console.log("socket.io connected");
 
     server.on('connection', (socket: Socket) => {
-
-        socket.on('ping', () => {
-            socket.emit('pong', "pong")
-        })
-
         //When client connects to room, fetch all messages related to room.
         socket.on('room-connect', async (data) => {
             console.log("room-connect:::");
@@ -19,18 +14,21 @@ const io = (server: Server) => {
 
             if(room.connectClient(data.clientId)) {
                 socket.emit('room-connect', room.getRoomJson());
-                server.emit(`room-connect-${data.roomId}`, convey.roomDao.getRoomById(data.roomId))
+                server.emit(`room-connect-${data.roomId}`, convey.roomDao.getRoomById(data.roomId)?.getRoomJson({messages: false}))
                 return
             }
             
             return socket.emit('room-error', {type: 'connection', message: "Unable to connect"})
         });
 
+
+        //TODO: on new client connecting to room, add client to list of clients by emitting to server room.
+
         socket.on('room-disconnect', (data) => {
             console.log("room-disconnect::");
 
             convey.roomDao.getRoomById(data.roomId)?.disconnectClient(data.clientId);
-            server.emit(`room-disconnect-${data.roomId}`, convey.roomDao.getRoomById(data.roomId))
+            server.emit(`room-disconnect-${data.roomId}`, convey.roomDao.getRoomById(data.roomId)?.getRoomJson({messages: false}))
         })
 
         socket.on('disconnect', (data) => {
@@ -59,8 +57,13 @@ const io = (server: Server) => {
             if(_event.type === 'getRooms') {
                 console.log('getRoom:::');
                 let rooms = convey.roomDao.getRooms();
-                console.log(rooms)
+
+                console.log(rooms);
                 socket.emit('getRooms', rooms);
+            }
+
+            if(_event.type === 'getRoomsList') {
+                socket.emit('getRoomsList', convey.roomDao.getRooms().map((room) => room.getRoomJson({messages: false})));
             }
 
 

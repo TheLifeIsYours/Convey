@@ -1,0 +1,27 @@
+.room-item .picture-container {
+  display: grid;
+  grid-auto-columns: 1.5em;
+  grid-row: 1;
+  width: 14em;
+  max-width: 10em;
+  overflow: hidden;
+  position: relative;
+}
+
+.room-item.picture-container:after {
+  content: '';
+  position: absolute;
+  top: 0px;
+  right: 0px;
+  height: 100%;
+  width: 4em;
+  background: linear-gradient(90deg, transparent, #3b363c);
+}
+
+.room-item.picture {
+  height: 3em;
+  border-radius: 100%;
+  border: solid 2px #00000033;
+  box-shadow: rgb(0 0 0 / 48%) 1px 1px 4px -2px;
+  grid-row: 1;
+}

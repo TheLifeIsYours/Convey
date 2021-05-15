@@ -76,21 +76,21 @@ export default class Room {
         this.messages.splice(this.messages.indexOf(messageId), 1);
         convey.roomDao.writeRoom(this);
       } else {
-        result.push({...message, user: convey.clientDao.getClientById(message.sender!!)});
+        result.push(message);
       }
     }
 
     return result;
   }
 
-  getRoomJson(): Object {
+  getRoomJson(options?: {messages?: boolean, clients?: boolean}): Object {
     return {
       id: this.id,
       owner: this.owner,
       name: this.name,
       description: this.description,
-      clients: this.getClientData(),
-      messages: this.getMessageData()
-    }
+      clients: options?.clients || options?.clients == undefined ? this.getClientData() : [],
+      messages: options?.messages || options?.messages == undefined ? this.getMessageData() : [],
+    };
   }
 }

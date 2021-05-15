@@ -3,6 +3,8 @@ import { Link } from 'react-router-dom';
 
 import { useSocket } from '../../../../hooks/UseSocket'
 
+import './styles.css'
+
 const List = () => {
   const socket = useSocket()
   
@@ -14,9 +16,9 @@ const List = () => {
 
   //Get available rooms
   useEffect(() => {
-    socket.emit('convey', {type: 'getRooms'});
+    socket.emit('convey', {type: 'getRoomsList'});
 
-    socket.on('getRooms', (data) => {
+    socket.on('getRoomsList', (data) => {
       if(data) setRooms(data)
     });
 
@@ -64,7 +66,19 @@ const List = () => {
     {rooms.map((room, key) => {
       return (<div key={key} className="room-item">
         <h1>{room.name}</h1>
+        <b>{room.description}</b>
         <h1>Users: {room.clients.length}</h1>
+
+        <div className="room-item picture-container">
+        {
+          room.clients.map((client, key) => {
+            return (
+              <img className="room-item picture" key={key} src={client.picture} alt={client.displayName}/>
+            )
+          })
+
+        }
+        </div>
         <Link to={`/room/${room.id}`}>Enter conversation</Link>
       </div>)
     })}
