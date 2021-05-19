@@ -14,7 +14,7 @@ const io = (server: Server) => {
 
             if(room.connectClient(data.clientId)) {
                 socket.emit('room-connect', room.getRoomJson());
-                server.emit(`room-connect-${data.roomId}`, convey.roomDao.getRoomById(data.roomId)?.getRoomJson({messages: false}))
+                server.emit(`room-connect-${data.roomId}`, room.getRoomJson({messages: false}))
                 return
             }
             

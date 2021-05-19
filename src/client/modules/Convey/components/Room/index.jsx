@@ -1,7 +1,9 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 import { useSocket } from '../../../../hooks/UseSocket';
+
 import useProfileData from '../../../Auth/hooks/useProfileData';
+import Message from './components/Message';
 
 import './styles.css'
 
@@ -63,6 +65,20 @@ const Room = () => {
       }
     })
 
+    socket.on(`room-connect-${params.id}`, (data) => {
+      setRoom({
+        ...roomRef.current,
+        clients: data.clients
+      });
+    })
+
+    socket.on(`room-disconnect-${params.id}`, (data) => {
+      setRoom({
+        ...roomRef.current,
+        clients: data.clients
+      });
+    })
+
     //Listen for incoming messages
     socket.on(`room-message-${params.id}`, (data) => {
       setRoom({
@@ -81,59 +97,70 @@ const Room = () => {
 
   //Scroll to bottom
   useEffect(() => {
-    let msgContainer = document.querySelector('#chat-message-container')
+    let msgContainer = document.querySelector('#room-message-container')
     msgContainer.scrollTop = msgContainer.scrollHeight
-  }, [room])
+  }, [room.messages])
 
-  return (<>
-    <h1>{room.name}</h1>
-    <p>{room.description}</p>
-    
-    <div id="chat-message-container">{
+  return (
+    <div id="room-main">
+      <div id="room-header">
+        <h1>{room.name}</h1>
+        <p>{room.description}</p>
+      </div>
 
-      room.messages.length > 1 &&
-      // room.messages.reduce((prevMessage, message, key) => {
-        // console.log(prevMessage, message, key)
-      room.messages.slice().map((message, key, messages) => {
-        let user = room.clients.find((client) => client.sub == message.sender)
+      <div id="room-chat-container">
+        <div id="room-message-container">{
+          room.messages.slice().map((message, key, messages) => {
 
-        return (
-          <div key={key} className="chat-message">
-            <img className="chat-message-sender-image" src={user?.picture}/>
-            <div className="chat-message-sender">
-              <div className="chat-message-sender-name">{user?.name}</div>
-              <div className="chat-message-time">{new Date(message.time).toLocaleTimeString()}</div>
+            return (
+              <div key={key} className="chat-message">
+                <img className="chat-message-sender-image" src={message.user?.picture}/>
+                <div className="chat-message-sender">
+                  <div className="chat-message-sender-name">{message.user?.name}</div>
+                  <div className="chat-message-time">{new Date(message.time).toLocaleTimeString()}</div>
+                </div>
+
+                <Message className="chat-message-text" text={message.text} />
+
+                {messages.slice(key-1).map((subMessage, key, subMessages) => {
+                  let prevMessage = subMessages[key-1];
+
+                  if(
+                    key > 0 &&
+                    subMessage.sender == message.sender &&
+                    subMessage.sender == prevMessage.sender &&
+                    subMessage.time - message.time < 60000
+                  ) {
+                    messages.splice(key, 1)
+                    return (<Message key={key} className="chat-message-text" text={subMessage.text} />)
+                  }
+                })}
+              </div>
+            )
+          })
+        }</div>
+
+        <form id="message-form" onSubmit={handleSubmit} autoComplete="off">
+          <input type="text" id="message-input" name="message"
+            value={message}
+            onChange={(e) => setMessage(e.target.value)}
+          />
+          
+          {/* <button id="message-button" type="submit">Convey</button> */}
+        </form>
+      </div>
+      <div id="room-user-list">
+        {room.clients.map((user, key) => {
+          return (
+            <div className="room-user-list-item" key={key}>
+              <img className="room-user-list-item-image" src={user.picture} />
+              <div className="room-user-list-item-name" >{user.name}</div>
             </div>
-
-            <div className="chat-message-text">{message.text}</div>
-
-            {messages.slice(key-1).map((subMessage, key, subMessages) => {
-              let prevMessage = subMessages[key-1];
-
-              if(
-                key > 0 &&
-                subMessage.sender == message.sender &&
-                subMessage.sender == prevMessage.sender &&
-                subMessage.time - message.time < 60000
-              ) {
-                messages.splice(key, 1)
-                return (<div key={key} className="chat-message-text">{subMessage.text}</div>)
-              }
-            })}
-          </div>
-        )
-      })
-    }</div>
-
-    <form id="message-form" onSubmit={handleSubmit} autoComplete="off">
-      <input type="text" id="message-input" name="message"
-        value={message}
-        onChange={(e) => setMessage(e.target.value)}
-      />
-      
-      {/* <button id="message-button" type="submit">Convey</button> */}
-    </form>
-  </>)
+          )
+        })}
+      </div>
+    </div>
+  )
 }
 
 export default Room

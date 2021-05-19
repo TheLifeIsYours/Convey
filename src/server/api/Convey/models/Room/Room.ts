@@ -66,7 +66,7 @@ export default class Room {
   }
 
   getMessageData(): Object[] {
-    let result: Object[] = [];
+    let result: MessageData[] = [];
 
     for(let messageId of this.messages) {
       let message: Message = convey.messageDao.getMessageById(messageId);
@@ -76,7 +76,10 @@ export default class Room {
         this.messages.splice(this.messages.indexOf(messageId), 1);
         convey.roomDao.writeRoom(this);
       } else {
-        result.push(message);
+
+        //Get client data from already fetched client, else get new client data from clientDao
+        let client = result.find(_message => _message.user.sub == message.sender)?.user || convey.clientDao.getClientById(message.sender!!)
+        result.push({...message, user: client!});
       }
     }
 
@@ -93,4 +96,13 @@ export default class Room {
       messages: options?.messages || options?.messages == undefined ? this.getMessageData() : [],
     };
   }
+}
+
+type MessageData = {
+  id: string;
+  room: string;
+  sender: string;
+  text: string;
+  time: number;
+  user: Client;
 }

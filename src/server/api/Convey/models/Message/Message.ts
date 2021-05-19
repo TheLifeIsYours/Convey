@@ -1,13 +1,13 @@
 import Client from '../Client/Client';
 
 export default class Message {
-  public id?: string;
-  public room?: string;
-  public sender?: string;
-  public text?: string;
-  public time?: number;
+  public id: string;
+  public room: string;
+  public sender: string;
+  public text: string;
+  public time: number;
 
-  constructor(messageData?: Message) {
+  constructor(messageData: Message) {
     this.id = messageData?.id || global?.convey?.getUniqueMessageId();
     this.room = messageData?.room;
     this.sender = messageData?.sender;

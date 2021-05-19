@@ -1,10 +1,56 @@
-#chat-message-container {
+#room-main {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  grid-template-rows: auto 1fr;
+  height: 100%;
+  overflow: hidden;
+}
+
+#room-header {
+
+}
+
+#room-chat-container {
+  display: grid;
+  grid-template-rows: 1fr auto;
+  overflow: hidden;
+}
+
+#room-message-container {
   display: flex;
   flex-direction: column;
   height: 100%;
   overflow: auto;
   overflow-x: hidden;
   background: #353135;
+}
+
+#room-user-list {
+  display: flex;
+  flex-direction: column;
+  grid-row: 1/3;
+  grid-column: 2;
+  width: 100%;
+  height: 100%;
+  background: #353135;
+  border-left: solid 2px #312e31;
+}
+
+.room-user-list-item {
+  display: grid;
+  grid-template-rows: 4em;
+  grid-template-columns: auto 1fr;
+  justify-content: center;
+  align-items: center;
+  grid-gap: 1em;
+  padding: 0.5rem;
+  background: #3b363c;
+  margin-bottom: 0.25rem;
+}
+
+.room-user-list-item-image {
+  height: 100%;
+  border-radius: 100%;
 }
 
 .chat-message:hover {
