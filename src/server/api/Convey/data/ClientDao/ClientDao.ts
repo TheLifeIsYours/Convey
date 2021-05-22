@@ -44,11 +44,21 @@ export default class ClientDao {
     return this.clients.filter(client => client.sub === userInfo.sub);
   }
 
+  writeClient(_client: Client): void {
+    let existingClient = this.clients.findIndex(client => client.sub === _client.sub);
+
+    if(existingClient) {
+      this.clients[existingClient] = _client;
+    }
+
+    this.writeJSON();
+  }
+
   writeJSON() {
     fs.writeFileSync(path.join(__dirname, 'clientData.json'), JSON.stringify(this.clients));
   }
 
-  getJSON(): UserInfo[] {
+  getJSON(): Client[] {
     console.log("writing to file clientDao");
     if(!fs.existsSync(path.join(__dirname, 'clientData.json'))) {
       this.writeJSON();

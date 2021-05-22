@@ -13,7 +13,7 @@ export default new class Convey {
 
   constructor(){};
 
-  createClient(userInfo: UserInfo): Client {
+  createClient(userInfo: Client): Client {
     const client = new Client(userInfo);
     this.clientDao.addClient(client);
     return client;

@@ -6,7 +6,7 @@ header {
   padding-left: 1em;
   border-bottom: solid 1px rgb(53 49 53);
   box-shadow: #000000 1px 1px 4px -2px;
-  background: #3b363c;
+  background: #333333;
 }
 
 #header-logo {
@@ -30,5 +30,5 @@ header > a {
 }
 
 header > a:hover {
-  color: #164E87;
+  color: #3d90e3;
 }

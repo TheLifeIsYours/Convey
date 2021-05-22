@@ -15,7 +15,7 @@
   right: 0px;
   height: 100%;
   width: 4em;
-  background: linear-gradient(90deg, transparent, #3b363c);
+  background: linear-gradient(90deg, transparent, var(--main-background-color));
 }
 
 .room-item.picture {

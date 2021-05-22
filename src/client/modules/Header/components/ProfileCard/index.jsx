@@ -11,7 +11,7 @@ const ProfileCard = () => {
   return (<section id="header-profile-card-container">
     <Link id="header-profile-card" to='/profile'>
       <img id="header-profile-card-image" src={userInfo.picture}/>
-      <div id="header-profile-card-name">{userInfo.name.replace(/\W/g, "")}</div>
+      <div id="header-profile-card-name">{userInfo.display_name}</div>
     </Link>
     <section id="header-profile-card-options">
       <Link className="header-profile-card-options option" to="/auth/signout">Sign out</Link>

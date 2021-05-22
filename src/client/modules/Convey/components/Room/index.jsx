@@ -116,7 +116,7 @@ const Room = () => {
               <div key={key} className="chat-message">
                 <img className="chat-message-sender-image" src={message.user?.picture}/>
                 <div className="chat-message-sender">
-                  <div className="chat-message-sender-name">{message.user?.name}</div>
+                  <div className="chat-message-sender-name">{message.user?.display_name}</div>
                   <div className="chat-message-time">{new Date(message.time).toLocaleTimeString()}</div>
                 </div>
 
@@ -154,7 +154,7 @@ const Room = () => {
           return (
             <div className="room-user-list-item" key={key}>
               <img className="room-user-list-item-image" src={user.picture} />
-              <div className="room-user-list-item-name" >{user.name}</div>
+              <div className="room-user-list-item-name" >{user.display_name}</div>
             </div>
           )
         })}

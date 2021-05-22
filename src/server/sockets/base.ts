@@ -73,6 +73,18 @@ const io = (server: Server) => {
             }
 
         });
+
+        socket.on('profile', (_event) => {
+            console.log('profile:::');
+
+            if(_event.type == 'edit') {
+                console.log('edit:::');
+                const {sub, display_name} = _event.data
+
+                const client = convey.clientDao.getClientById(sub)
+                if(client) client.DisplayName = display_name
+            }
+        })
     });
 };
 
